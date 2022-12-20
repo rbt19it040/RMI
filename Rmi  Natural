@@ -1,0 +1,60 @@
+Adder.java
+
+import java.rmi.*;  
+public interface Adder extends Remote{  
+public int add(int n)throws RemoteException;  
+}  
+
+
+AdderRemote.java
+
+import java.rmi.*;  
+import java.rmi.server.*;  
+public class AdderRemote extends UnicastRemoteObject implements Adder{  
+AdderRemote()throws RemoteException{  
+super();  
+}  
+public int add(int n){return n*(n+1)/2;}  
+}  
+
+
+Myclient.java
+
+import java.rmi.*;  
+import java.util.Scanner;
+public class MyClient{  
+public static void main(String args[]){  
+try{  
+Adder stub=(Adder)Naming.lookup("rmi://localhost:5000/sonoo");  
+Scanner s = new Scanner(System.in);
+System.out.println("Enter number:");
+int n=s.nextInt();
+System.out.println("Sum of"+n+" Natural Number is :");
+System.out.println(stub.add(n));  
+}catch(Exception e){}  
+}  
+}  
+
+MyServer.java
+
+import java.rmi.*;  
+import java.rmi.registry.*;  
+public class MyServer{  
+public static void main(String args[]){  
+try{  
+Adder stub=new AdderRemote();  
+Naming.rebind("rmi://localhost:5000/sonoo",stub);  
+}catch(Exception e){System.out.println(e);}  
+}  
+}  
+
+
+
+
+
+
+
+
+
+
+
